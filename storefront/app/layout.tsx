@@ -30,10 +30,10 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Store — Modern Commerce',
-    template: '%s | Store',
+    default: 'HabitCore — Build Habits That Actually Stick',
+    template: '%s | HabitCore',
   },
-  description: 'Discover curated products crafted with care. A modern ecommerce experience.',
+  description: 'The complete digital habit-tracking system used by 14,200+ high-performers. Build life-changing habits with science-backed frameworks. Instant download.',
 }
 
 export default function RootLayout({

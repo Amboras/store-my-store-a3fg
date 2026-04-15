@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Clock, Flame, Eye } from 'lucide-react'
+import { Clock, Flame, Eye, TrendingUp } from 'lucide-react'
 
 function pad(n: number) {
   return String(n).padStart(2, '0')
@@ -10,6 +10,7 @@ function pad(n: number) {
 export default function ProductPageClient() {
   const [time, setTime] = useState({ h: 5, m: 43, s: 17 })
   const [viewers, setViewers] = useState(23)
+  const [salesCount, setSalesCount] = useState(47)
 
   // Countdown timer
   useEffect(() => {
@@ -37,13 +38,23 @@ export default function ProductPageClient() {
     return () => clearInterval(interval)
   }, [])
 
+  // Slowly increment sales count
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() > 0.65) {
+        setSalesCount((prev) => prev + 1)
+      }
+    }, 12000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {/* Sale countdown */}
       <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200">
         <Clock className="h-4 w-4 text-amber-600 flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-amber-700 font-medium">
+          <p className="text-xs text-amber-700 font-semibold">
             Launch price ends in
           </p>
         </div>
@@ -56,17 +67,28 @@ export default function ProductPageClient() {
         </div>
       </div>
 
-      {/* Live viewers */}
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal opacity-60"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-teal"></span>
-        </span>
-        <Eye className="h-3.5 w-3.5" />
-        <span>
-          <strong className="text-navy font-semibold">{viewers} people</strong> viewing this right now
-        </span>
-        <Flame className="h-3.5 w-3.5 text-orange-400" />
+      {/* Live activity row */}
+      <div className="flex items-center justify-between gap-4 px-1">
+        {/* Live viewers */}
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="relative flex h-2 w-2 flex-shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal opacity-60" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-teal" />
+          </span>
+          <Eye className="h-3.5 w-3.5" />
+          <span>
+            <strong className="text-navy font-semibold">{viewers}</strong> viewing now
+          </span>
+        </div>
+
+        {/* Recent sales */}
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <TrendingUp className="h-3.5 w-3.5 text-teal" />
+          <span>
+            <strong className="text-navy font-semibold">{salesCount}</strong> sold today
+          </span>
+          <Flame className="h-3.5 w-3.5 text-orange-400" />
+        </div>
       </div>
     </div>
   )

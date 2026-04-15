@@ -11,8 +11,6 @@ import {
   ShieldCheck,
   RefreshCw,
   Lock,
-  Clock,
-  CheckCircle,
   Star,
   Zap,
   BarChart2,
@@ -30,6 +28,7 @@ import { ProductViewTracker } from '@/components/product/product-view-tracker'
 import { getProductPlaceholder } from '@/lib/utils/placeholder-images'
 import { type VariantExtension } from '@/components/product/product-price'
 import ProductPageClient from '@/components/product/product-page-client'
+import BundleOffer from '@/components/product/bundle-offer'
 
 async function getProduct(handle: string) {
   try {
@@ -266,41 +265,28 @@ export default async function ProductPage({
             {/* ── CRO: Urgency Bar ── */}
             <ProductPageClient />
 
-            {/* ── Variant Selector + Price + Add to Cart ── */}
-            <ProductActions product={product} variantExtensions={variantExtensions} />
-
-            {/* ── BUNDLE UPSELL ── */}
-            {upsellProduct && upsellPrice != null && currentPrice != null && (
-              <div className="rounded-xl border-2 border-teal/30 bg-teal/5 p-5">
-                <div className="flex items-start justify-between gap-3 mb-4">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-teal mb-1">
-                      Level Up Your Order
-                    </p>
-                    <p className="text-sm font-semibold text-navy">
-                      Add &ldquo;{upsellProduct.title}&rdquo; for just{' '}
-                      <span className="text-teal">
-                        ${((upsellPrice) / 100).toFixed(2)}
-                      </span>{' '}
-                      more
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      Save $12 when you grab the full system today
-                    </p>
-                  </div>
-                  {upsellProduct.thumbnail && (
-                    <div className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
-                      <Image src={upsellProduct.thumbnail} alt={upsellProduct.title} fill className="object-cover" sizes="56px" />
-                    </div>
-                  )}
+            {/* ── BUNDLE OFFER — in-page add-to-cart selector ── */}
+            {upsellProduct && upsellPrice != null && currentPrice != null ? (
+              <div>
+                <div className="mb-3">
+                  <p className="text-xs uppercase tracking-widest font-bold text-teal mb-0.5">Choose Your Package</p>
+                  <p className="text-[11px] text-muted-foreground">Select an option below and add directly to bag</p>
                 </div>
-                <Link
-                  href={`/products/${upsellProduct.handle}`}
-                  className="block w-full text-center py-2.5 px-4 rounded-lg border-2 border-teal text-teal text-sm font-bold hover:bg-teal hover:text-white transition-all duration-200"
-                >
-                  Add Bundle — Total ${((currentPrice + upsellPrice) / 100).toFixed(2)}
-                </Link>
+                <BundleOffer
+                  singleVariantId={product.variants?.[0]?.id || ''}
+                  singlePrice={currentPrice}
+                  singleTitle={product.title}
+                  bundleVariantId={upsellProduct.variants?.[0]?.id || ''}
+                  bundlePrice={upsellPrice}
+                  bundleTitle={upsellProduct.title}
+                  bundleThumbnail={upsellProduct.thumbnail}
+                  singleProductId={product.id}
+                  bundleProductId={upsellProduct.id}
+                />
               </div>
+            ) : (
+              /* Fallback: standard add to cart when no bundle exists */
+              <ProductActions product={product} variantExtensions={variantExtensions} />
             )}
 
             {/* ── Trust Signals ── */}
