@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Activity, Twitter, Instagram, Youtube } from 'lucide-react'
+import { Activity, Twitter, Instagram, PlayCircle } from 'lucide-react'
 import { clearConsent } from '@/lib/cookie-consent'
 import { usePolicies } from '@/hooks/use-policies'
 
